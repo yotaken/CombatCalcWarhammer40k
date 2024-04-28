@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Calculadora de Combate</title>
+	<script src="RoldiDados.js"></script>
+	<script>
+		function datosPrueba() {
+			const habilidadAcierto = 3;
+			const fuerzaArmaAtacante = 7;
+			const penetracionArmadura = 1;
+			const numeroAtaques = 6;
+			const resistenciaDefensor = 5;
+			const salvacionDefensor = 2;
+			const danoFijoAtaque = '';
+			const danioVariable = '1d6+1';
+			const invulnerableSave = 4;
+			const numRepeticiones = 2;
+			const numDefensores = 5;
+			const vidaDefensores = 4;
+			simularAtaque(
+				habilidadAcierto,
+				fuerzaArmaAtacante,
+				penetracionArmadura,
+				numeroAtaques,
+				resistenciaDefensor,
+				salvacionDefensor,
+				danoFijoAtaque,
+				danioVariable,
+				invulnerableSave,
+				numRepeticiones,
+				numDefensores,
+				vidaDefensores
+			);
+			imprimirResultado();
+		}
+	</script>
+	<style>
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+      }
+
+      .container {
+          max-width: 400px;
+          width: 90%;
+          background-color: #fff;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+      }
+
+      h1 {
+          text-align: center;
+          margin-bottom: 20px;
+      }
+
+      form {
+          display: flex;
+          flex-direction: column;
+      }
+
+      label {
+          margin-bottom: 5px;
+          font-weight: bold;
+      }
+
+      input[type="number"],
+      input[type="text"],
+      select {
+          width: 100%;
+          padding: 8px;
+          margin-bottom: 15px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+      }
+
+      button[type="submit"] {
+          width: 100%;
+          background-color: #4caf50;
+          color: white;
+          padding: 10px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+      }
+
+      button[type="submit"]:hover {
+          background-color: #45a049;
+      }
+
+      @media (max-width: 600px) {
+          .container {
+              width: 100%;
+          }
+      }
+	</style>
+</head>
+<body>
+<div class="container">
+	<h1>Calculadora de <span onclick="datosPrueba();" style="cursor: pointer;">Combate</span></h1>
+	<form id="combatForm">
+		<label for="habilidadAcierto">Habilidad de Acierto:</label>
+		<input type="number" id="habilidadAcierto" name="habilidadAcierto" placeholder="3" required>
+
+		<label for="fuerzaArmaAtacante">Fuerza del Arma del Atacante:</label>
+		<input type="number" id="fuerzaArmaAtacante" name="fuerzaArmaAtacante" placeholder="7" required>
+
+		<label for="penetracionArmadura">Penetración de la Armadura:</label>
+		<input type="number" id="penetracionArmadura" name="penetracionArmadura" placeholder="1" required>
+
+		<label for="numeroAtaques">Número de Ataques:</label>
+		<input type="number" id="numeroAtaques" name="numeroAtaques" placeholder="6" required>
+
+		<label for="resistenciaDefensor">Resistencia del Defensor:</label>
+		<input type="number" id="resistenciaDefensor" name="resistenciaDefensor" placeholder="5" required>
+
+		<label for="salvacionDefensor">Salvación del Defensor:</label>
+		<input type="number" id="salvacionDefensor" name="salvacionDefensor" placeholder="2" required>
+
+		<label for="danoFijoAtaque">Daño fijo de ataque:</label>
+		<select id="danoFijoAtaque" name="danoFijoAtaque">
+			<option value="">Seleccionar daño arma</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+		</select>
+		<label for="danioVariable">Daño variable:</label>
+		<select id="danioVariable" name="danioVariable">
+			<option value="">Seleccionar daño variable</option>
+			<option value="1d6">1d6</option>
+			<option value="1d6+1">1d6+1</option>
+			<option value="1d6+2">1d6+2</option>
+			<option value="1d6+3">1d6+3</option>
+		</select>
+		<label for="invulnerableSave">Salvación Invulnerable:</label>
+		<input type="number" id="invulnerableSave" name="invulnerableSave" placeholder="4" required>
+		<label for="numRepeticiones">Número de Repeticiones:</label>
+		<input type="number" id="numRepeticiones" name="numRepeticiones" placeholder="3">
+		<section>
+			<label for="numDefensores">Número de Defensores:</label>
+			<input type="number" id="numDefensores" name="numDefensores" placeholder="5">
+			<label for="vidaDefensores">Vida Defensores:</label>
+			<input type="number" id="vidaDefensores" name="vidaDefensores" placeholder="4">
+		</section>
+		<button type="submit">Calcular</button>
+	</form>
+</div>
+<script>
+	document.getElementById('combatForm').addEventListener('submit', function(event) {
+		event.preventDefault();
+		const habilidadAcierto = parseInt(document.getElementById('habilidadAcierto').value);
+		const fuerzaArmaAtacante = parseInt(document.getElementById('fuerzaArmaAtacante').value);
+		const penetracionArmadura = parseInt(document.getElementById('penetracionArmadura').value);
+		const numeroAtaques = parseInt(document.getElementById('numeroAtaques').value);
+		const resistenciaDefensor = parseInt(document.getElementById('resistenciaDefensor').value);
+		const salvacionDefensor = parseInt(document.getElementById('salvacionDefensor').value);
+		const danoFijoAtaque = document.getElementById('danoFijoAtaque').value;
+		const danioVariable = document.getElementById('danioVariable').value;
+		const invulnerableSave = parseInt(document.getElementById('invulnerableSave').value);
+		const numRepeticiones = parseInt(document.getElementById('numRepeticiones').value);
+		const numDefensores = parseInt(document.getElementById('numDefensores').value);
+		const vidaDefensores = parseInt(document.getElementById('vidaDefensores').value);
+		simularAtaque(
+			habilidadAcierto,
+			fuerzaArmaAtacante,
+			penetracionArmadura,
+			numeroAtaques,
+			resistenciaDefensor,
+			salvacionDefensor,
+			danoFijoAtaque,
+			danioVariable,
+			invulnerableSave,
+			numRepeticiones,
+			numDefensores,
+			vidaDefensores
+		);
+		imprimirResultado();
+	});
+</script>
+</body>
+</html>
